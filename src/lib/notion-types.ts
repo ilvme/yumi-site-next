@@ -3,23 +3,25 @@ export interface PostList {
     hasMore: boolean;
     nextCursor: string;
 
-    posts: Post[];
+    posts: PostMeta[];
 }
 
 // 文章
-export interface Post {
+export interface PostMeta {
     id: string;
     title: string;
     slug: string;
-
     tags: string[];
     category?: string;
     published: boolean;
     publishedAt: string;
-
     cover?: string;
-
     summary?: string;
+}
+
+export interface Post {
+    postMeta: PostMeta;
+    content: string;
 }
 
 // 说说相关
@@ -35,3 +37,4 @@ export interface Word {
     content: string;
     publishedAt: string;
 }
+

@@ -1,6 +1,6 @@
 import {Client} from "@notionhq/client";
 import {NotionToMarkdown} from "notion-to-md";
-import {PostList,Post} from "@/lib/notion-types";
+import {PostList,PostMeta, Post} from "@/lib/notion-types";
 
 
 export const notion = new Client({
@@ -18,10 +18,38 @@ export const databases = {
   links: process.env.NOTION_LINKS_DB_ID,
 } as const;
 
-// 获取文章内容并转换为 md 字符串
-export async function getPostContent(pageId: string) {
-  const mdBlocks = await n2m.pageToMarkdown(pageId);
-  return n2m.toMarkdownString(mdBlocks);
+// 通过 slug 获取文章信息
+export async function getPostBySlug(slug: string) {
+  const response = await notion.databases.query({
+    database_id: databases.essays,
+    filter: {
+      property: "slug",
+      formula: {
+        string: {
+          equals: slug,
+        },
+      },
+    },
+  });
+  console.log('文章信息', response);
+  
+  if (response.results.length === 0) {
+    return null;
+  }
+
+  if(response.results.length > 1) {
+    throw new Error('找到多个文章')
+  }
+
+  const page = response.results[0];
+  const mdBlocks = await n2m.pageToMarkdown(page.id);
+  const mdString = n2m.toMarkdownString(mdBlocks);
+
+  const post :Post= {
+    postMeta: toPostMeta(page),
+    content: mdString.parent,
+  }
+  return  post
 }
 
 
@@ -40,17 +68,7 @@ export async function listPublishedPost(databaseId: string) {
       sorts: [{ property: "publishedAt", direction: "descending" }],
     });
     console.log('源数据', res);
-    const posts = res.results.map((item:any) => ({
-      id: item.id,
-      title: item.properties.title?.title[0]?.plain_text || "Untitled",
-      slug: item.properties.slug?.rich_text[0]?.plain_text || item.id,
-      tags: item.properties.tags?.multi_select?.map((tag: any) => tag.name) || [],
-      category: item.properties.category?.select?.name,
-      publishedAt: item.properties.publishedAt?.date?.start,
-      published: item.properties.published?.checkbox,
-      cover: item.cover?.external?.url || item.cover?.file?.url,
-      summary: item.properties.summary?.rich_text[0]?.plain_text,
-    })) as Post[];
+    const posts = res.results.map((item:any) => toPostMeta(item)) as PostMeta[];
 
     const result = {
       hasMore: res.has_more,
@@ -64,3 +82,15 @@ export async function listPublishedPost(databaseId: string) {
     throw error;
   }
 }
+
+export const toPostMeta = (item:any):PostMeta => ({
+  id: item.id,
+  title: item.properties.title?.title[0]?.plain_text || "Untitled",
+  slug: item.properties.slug?.rich_text[0]?.plain_text || item.id,
+  tags: item.properties.tags?.multi_select?.map((tag: any) => tag.name) || [],
+  category: item.properties.category?.select?.name,
+  publishedAt: item.properties.publishedAt?.date?.start,
+  published: item.properties.published?.checkbox,
+  cover: item.cover?.external?.url || item.cover?.file?.url,
+  summary: item.properties.summary?.rich_text[0]?.plain_text,
+});

@@ -1,25 +1,38 @@
-import {getPostContent} from "@/lib/notion";
-import ReactMarkdown from "react-markdown"
+import Post from "@/components/post/Post";
+import {getPostBySlug} from "@/lib/notion";
 
-async function getPost(pageId: string) {
-    return await getPostContent(pageId);
-}
 
 export default async function PostPage({params}) {
   const {slug} = await params
-    // const post = await getPost('19dc485ef3568093a22fda97f12ef03b');
-    console.log('slug', slug)
-    const post = await getPost(slug);
-    console.log(post)
+  const {content, postMeta} = await getPostBySlug(slug);
 
   return (
-    <div className="container py-8">
-      <h1 className="text-3xl font-bold mb-8">随笔内容</h1>
-        <article>
-            <ReactMarkdown>
-                {post.parent}
-            </ReactMarkdown>
-        </article>
+    <div className="container max-w-4xl mx-auto px-4 py-12">
+      <article className="prose prose-lg dark:prose-invert mx-auto">
+        <header className="mb-8">
+          <h1 className="text-4xl font-bold mb-4">{postMeta.title}</h1>
+          <div className="text-gray-600 dark:text-gray-400 space-x-4">
+            <time dateTime={postMeta.publishedAt}>
+              {postMeta.publishedAt}
+            </time>
+            {postMeta.tags && (
+              <span className="space-x-2">
+                {postMeta.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="inline-block bg-gray-100 dark:bg-gray-800 rounded-full px-3 py-1 text-sm"
+                  >
+                    # {tag}
+                  </span>
+                ))}
+              </span>
+            )}
+          </div>
+        </header>
+        
+        <Post content={content}/>
+
+      </article>
     </div>
   );
 }
