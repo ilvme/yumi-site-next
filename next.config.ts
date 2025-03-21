@@ -1,9 +1,9 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  images: {
-    domains: ['www.notion.so', 'notion.so', 's3.us-west-2.amazonaws.com'],
-  },
+  // images: {
+  //   domains: ['www.notion.so', 'notion.so', 's3.us-west-2.amazonaws.com'],
+  // },
   env: {
     NOTION_TOKEN: process.env.NOTION_TOKEN,
     NOTION_ESSAYS_DB_ID: process.env.NOTION_ESSAYS_DB_ID,
