@@ -10,7 +10,7 @@ export const n2m = new NotionToMarkdown({ notionClient: notion });
 
 export const databases = {
   essays: '76b60dd049a34d1f995701cfce25c13e',
-  words: process.env.NOTION_WORDS_DB_ID,
+  words: '1a4c485ef35680f18abdf460c74835e4',
   notes: process.env.NOTION_NOTES_DB_ID,
   toolchains: process.env.NOTION_TOOLCHAINS_DB_ID,
   about: process.env.NOTION_ABOUT_PAGE_ID,
@@ -94,3 +94,41 @@ export const toPostMeta = (item: any): PostMeta => ({
   cover: item.cover?.external?.url || item.cover?.file?.url,
   summary: item.properties.summary?.rich_text[0]?.plain_text,
 });
+
+// 获取指定数据库下所有已发布的文章
+export async function listPublishedWords(databaseId: string) {
+  try {
+    const res = await notion.databases.query({
+      database_id: databaseId,
+      page_size: 200,
+      // filter: {
+      //   property: 'published',
+      //   checkbox: {
+      //     equals: true,
+      //   },
+      // },
+      sorts: [{ property: '发布时间', direction: 'descending' }],
+    });
+    console.log('源数据', res);
+    const posts = [];
+    res.results.forEach((item) => {
+      const i = {
+        id: item.id,
+        content: item.properties.Title.title[0]?.plain_text || 'Untitled',
+        createAt: item.properties[`发布时间`].formula.date.start,
+      };
+      posts.push(i);
+    });
+
+    const result = {
+      hasMore: res.has_more,
+      nextCursor: res.next_cursor,
+      posts,
+    };
+    console.log('文章列表信息', result);
+    return result as PostList;
+  } catch (error) {
+    console.error('Error fetching database:', error);
+    throw error;
+  }
+}

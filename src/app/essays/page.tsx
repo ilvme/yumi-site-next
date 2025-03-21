@@ -19,16 +19,13 @@ export default async function EssaysPage() {
 
   return (
     <div className="container max-w-6xl px-4 py-5">
-      <h1 className="mb-8 bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-center text-xl font-bold text-transparent">
-        随笔
-      </h1>
       <div className="space-y-8">
         {years.map((year) => (
           <section key={year} className="group">
-            <h2 className="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-400">
+            <h2 className="mb-2 text-xl font-semibold text-blue-600 dark:text-blue-800">
               {year}
             </h2>
-            <div className="space-y-2">
+            <div className="ml-4">
               {postsByYear[year].map((essay) => (
                 <PostItem key={essay.id} essay={essay} />
               ))}

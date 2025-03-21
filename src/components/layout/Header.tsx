@@ -2,12 +2,12 @@ import Link from 'next/link';
 
 export default function Header() {
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-gray-300">
+    <header className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white">
       <div className="container flex h-16 items-center justify-between">
         <Link href="/" className="flex items-center">
           <span className="text-xl font-bold">Yumi</span>
         </Link>
-        <nav className="hidden items-center space-x-6 text-sm font-medium md:flex">
+        <nav className="space-x-6 text-sm font-medium md:flex">
           <Link href="/" className="group relative">
             <span className="hover:text-blue-600/80">主页</span>
           </Link>
