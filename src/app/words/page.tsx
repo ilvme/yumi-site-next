@@ -17,10 +17,12 @@ export default async function WordsPage() {
         {words.map((word) => (
           <article
             key={word.id}
-            className="max-w-[300px] rounded-lg border px-2 py-3"
+            className="max-w-[300px] rounded-lg border border-gray-200 px-2 py-3 dark:border-gray-800"
           >
-            <p className="text-sm">{word.content}</p>
-            <span className="text-center text-sm text-gray-500">
+            <p className="text-sm text-gray-800 dark:text-gray-400">
+              {word.content}
+            </p>
+            <span className="text-xs text-gray-500">
               {new Date(word.createAt).toDateString()}
             </span>
           </article>

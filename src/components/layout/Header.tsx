@@ -1,31 +1,21 @@
+import navItems from '@/app/_data/nav';
 import Link from 'next/link';
 
 export default function Header() {
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white">
+    <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-[var(--background)] dark:border-gray-800 dark:bg-black">
       <div className="container flex h-16 items-center justify-between">
         <Link href="/" className="flex items-center">
-          <span className="text-xl font-bold">Yumi</span>
+          <span className="text-xl font-bold text-gray-500">林深时觉寒</span>
         </Link>
         <nav className="space-x-6 text-sm font-medium md:flex">
-          <Link href="/" className="group relative">
-            <span className="hover:text-blue-600/80">主页</span>
-          </Link>
-          <Link href="/essays" className="group relative">
-            <span className="hover:text-blue-600/80">随笔</span>
-          </Link>
-          <Link href="/words" className="group relative">
-            <span className="hover:text-blue-600/80">说说</span>
-          </Link>
-          <Link href="/notes" className="group relative">
-            <span className="hover:text-blue-600">技术笔记</span>
-          </Link>
-          <Link href="/about" className="group relative">
-            <span className="hover:text-blue-600/80">关于</span>
-          </Link>
-          <Link href="/friends" className="group relative">
-            <span className="hover:text-blue-600/80">友链</span>
-          </Link>
+          {navItems.map((item) => (
+            <Link key={item.href} href={item.href} className="">
+              <span className="text-gray-600 hover:text-blue-600/80 dark:text-[#c7cbd2] dark:hover:text-blue-400">
+                {item.name}
+              </span>
+            </Link>
+          ))}
         </nav>
       </div>
     </header>

@@ -18,11 +18,11 @@ export default async function EssaysPage() {
   const years = Object.keys(postsByYear).sort((a, b) => b - a);
 
   return (
-    <div className="container max-w-6xl px-4 py-5">
-      <div className="space-y-8">
+    <div className="container max-w-6xl px-8 py-3">
+      <div className="space-y-6">
         {years.map((year) => (
-          <section key={year} className="group">
-            <h2 className="mb-2 text-xl font-semibold text-blue-600 dark:text-blue-800">
+          <section key={year} className="">
+            <h2 className="mb-2 text-xl font-semibold text-blue-200 dark:text-blue-600 dark:text-blue-800">
               {year}
             </h2>
             <div className="ml-4">
