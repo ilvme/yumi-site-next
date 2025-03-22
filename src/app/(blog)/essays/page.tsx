@@ -18,13 +18,17 @@ export default async function EssaysPage() {
   const years = Object.keys(postsByYear).sort((a, b) => b - a);
 
   return (
-    <div className="container max-w-6xl px-8 py-3">
+    <div className="container max-w-6xl py-3">
+      <div className="mb-6">
+        <h2 className="mb-2 text-2xl">随笔</h2>
+        <p className="dark:text-gray-500">记录我的所见、所闻、所思、所感。</p>
+      </div>
       <div className="space-y-6">
         {years.map((year) => (
           <section key={year} className="">
-            <h2 className="mb-2 text-xl font-semibold text-blue-200 dark:text-blue-600 dark:text-blue-800">
+            <h3 className="mb-2 text-xl font-bold text-rose-200 dark:text-rose-600">
               {year}
-            </h2>
+            </h3>
             <div className="ml-4">
               {postsByYear[year].map((essay) => (
                 <PostItem key={essay.id} essay={essay} />

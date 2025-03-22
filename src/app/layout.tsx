@@ -9,7 +9,12 @@ export const metadata: Metadata = {
 };
 
 const myFont = localFont({
-  src: './assets/font/LXGWWenKai-Regular.ttf',
+  // src: './assets/font/LXGWWenKaiLite-Medium.ttf',
+  // src: './assets/font/LXGWWenKaiMonoLite-Medium.ttf',
+  // src: './assets/font/mini/LXGWNeoXiHei.ttf',
+  src: './assets/font/mini/LXGWZhenKai-Regular.ttf',
+  // src: './assets/font/LXGWWenKaiLite-Light.ttf',
+  // src: './assets/font/LXGWWenKaiLite-Regular.ttf',
 });
 
 export default function RootLayout({

@@ -27,20 +27,48 @@ export default function Home() {
         <p className="py-3">
           喜欢在周末逛个超市，做点美食。偶尔小酌一杯。饿的时候只想吃咸香的，不习惯穿拖鞋，不喜欢吃饼干。
           偶尔打打游戏，一直在辅助的位置尝试着所有自认为有趣（快乐）的英雄，信奉快乐游戏的前提是：进入游戏的第一件事，键入{' '}
-          <code className="text-rose-500">/mute all</code>，再按下{' '}
-          <code className="text-rose-500">Enter</code>。
+          <code className="rounded-sm bg-[#ededeb] px-1 text-rose-400">
+            /mute all
+          </code>
+          ，再按下{' '}
+          <code className="rounded-sm bg-[#ededeb] px-1 text-rose-400">
+            Enter
+          </code>
+          。
         </p>
         <h2 className="mt-4 mb-2 text-2xl font-bold">highlight here</h2>
         <p>
           我在 Notion 里分享了一些
-          <Link href="/essays">日常随笔</Link>、
-          <Link href="/notes">技术笔记</Link>
+          <Link
+            href="/essays"
+            className="underline decoration-rose-300 decoration-wavy decoration-2 hover:text-rose-400"
+          >
+            日常随笔
+          </Link>
+          、
+          <Link
+            href="/notes"
+            className="underline decoration-rose-300 decoration-wavy decoration-2 hover:text-rose-400"
+          >
+            技术笔记
+          </Link>
           ，以及偶尔也会发发的
-          <Link href="/notes">牢骚</Link>。
+          <Link
+            href="/notes"
+            className="underline decoration-rose-300 decoration-wavy decoration-2 hover:text-rose-400"
+          >
+            牢骚
+          </Link>
+          。
         </p>
         <p className="py-3">
           最近 AI 的风终究是吹到了这里，借助 Trae 整了个
-          <Link href="https://hot.ikangjia.cn">新闻热点</Link>
+          <Link
+            href="https://hot.ikangjia.cn"
+            className="underline decoration-rose-300 decoration-wavy decoration-2 hover:text-rose-400"
+          >
+            新闻热点
+          </Link>
           聚合网页，我一个 Next.js 小白从搭建项目到部署几乎未写一行逻辑性代码...
         </p>
         <h2 className="mt-4 mb-2 text-2xl font-bold">find me</h2>

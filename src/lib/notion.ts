@@ -126,7 +126,7 @@ export async function listPublishedWords(databaseId: string) {
       posts,
     };
     console.log('文章列表信息', result);
-    return result as PostList;
+    return result;
   } catch (error) {
     console.error('Error fetching database:', error);
     throw error;

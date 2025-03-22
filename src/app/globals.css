@@ -2,7 +2,7 @@
 @plugin "@tailwindcss/typography";
 
 :root {
-  --background: #faf8f6;
+  --background: #f3f0ee;
   --foreground: #171717;
 }
 
@@ -16,5 +16,6 @@
 body {
   background: var(--background);
   color: var(--foreground);
+  font-size: 18px;
   /*font-family: var('./assets/fonts/LXGWWenKai-Regular.ttf'), serif !important;*/
 }
