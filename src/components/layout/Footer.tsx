@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className="mt-10 mb-6">
+    <footer className="mt-10 mb-6 text-base">
       以上内容版权所有 ©<Link href="/">林深时觉寒</Link> 2012 -{' '}
       {new Date().getFullYear()}
       <div>

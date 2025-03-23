@@ -5,7 +5,7 @@ import Link from 'next/link';
 export default async function AboutPage() {
   return (
     <div className="py-3">
-      <BlogHero title="朋友" description="欢迎交换友链" />
+      <BlogHero title="朋友" description="欢迎交换友链。" />
 
       {friends.map((friend) => (
         <Link
