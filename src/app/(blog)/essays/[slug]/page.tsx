@@ -2,7 +2,11 @@
 import PostRender from '@/components/post/PostRender';
 import { getPostBySlug } from '@/lib/notion';
 
-export default async function PostPage({ params }) {
+export default async function PostPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
   const { content, postMeta } = await getPostBySlug(slug);
 
