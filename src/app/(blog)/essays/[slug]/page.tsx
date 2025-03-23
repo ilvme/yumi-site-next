@@ -8,6 +8,7 @@ export default async function PostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+
   const { content, postMeta } = await getPostBySlug(slug);
 
   return (
@@ -18,7 +19,7 @@ export default async function PostPage({
           <span className="text-sm text-gray-400"> {postMeta.publishedAt}</span>
           {postMeta.tags && (
             <span className="space-x-2">
-              {postMeta.tags.map((tag) => (
+              {postMeta.tags.map((tag: string) => (
                 <span
                   key={tag}
                   className="inline-block rounded-sm bg-gray-100 px-2 py-0.5 text-sm dark:bg-[#272727]"
