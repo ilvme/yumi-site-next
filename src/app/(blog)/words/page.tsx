@@ -1,38 +1,72 @@
 'use cache';
 
+import BlogHero from '@/components/BlogHero';
+import WordCard from '@/components/word/WordCard';
 import { databases, listPublishedWords } from '@/lib/notion';
 
 async function getWords() {
   const response = await listPublishedWords(databases.words);
   const words = response.posts;
 
-  return words;
+  // 按年份和月份分组
+  const wordsByYearMonth = words.reduce((acc, word) => {
+    const date = new Date(word.createAt);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+
+    if (!acc[year]) {
+      acc[year] = {};
+    }
+    if (!acc[year][month]) {
+      acc[year][month] = [];
+    }
+    acc[year][month].push(word);
+    return acc;
+  }, {});
+
+  // 获取年份并降序排序
+  const years = Object.keys(wordsByYearMonth).sort((a, b) => b - a);
+
+  return { wordsByYearMonth, years };
 }
 
 export default async function WordsPage() {
-  const words = await getWords();
+  const { wordsByYearMonth, years } = await getWords();
 
   return (
     <div className="py-4">
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold">说说</h2>
-        <p className="text-gray-500">
-          一句话叙当前所历之事，一句话抒此刻难言之情，一句话吐所遇违心之槽。
-        </p>
-      </div>
-      <div className={`flex flex-wrap gap-3`}>
-        {words.map((word) => (
-          <article
-            key={word.id}
-            className="flex max-w-[300px] flex-col justify-between gap-3 rounded-lg border border-gray-200 px-2 py-3 dark:border-gray-800"
-          >
-            <p className="text-base text-gray-800 dark:text-rose-200">
-              {word.content}
-            </p>
-            <span className="text-right text-xs text-gray-500">
-              {new Date(word.createAt).toDateString()}
-            </span>
-          </article>
+      <BlogHero
+        title="说说"
+        description="一句话叙当前所历之事，一句话抒此刻难言之情，一句话吐所遇违心之槽。"
+      />
+
+      <div className="space-y-8">
+        {years.map((year) => (
+          <section key={year} className="space-y-4">
+            <h3 className="text-xl font-bold text-rose-200 dark:text-rose-600">
+              {year}{' '}
+              <span className="text-base font-normal text-gray-500">
+                (共计 {Object.values(wordsByYearMonth[year]).flat().length} 个)
+              </span>
+            </h3>
+            {Object.keys(wordsByYearMonth[year])
+              .sort((a, b) => b - a)
+              .map((month) => (
+                <div key={`${year}-${month}`} className="ml-4 space-y-2">
+                  <span className="text-base font-medium text-gray-600 dark:text-gray-400">
+                    {month} 月{' '}
+                    <span className="text-sm font-normal text-gray-500">
+                      ( {wordsByYearMonth[year][month].length} )
+                    </span>
+                  </span>
+                  <div className="flex flex-wrap gap-3">
+                    {wordsByYearMonth[year][month].map((word) => (
+                      <WordCard key={`${year}-${month}-${word}`} word={word} />
+                    ))}
+                  </div>
+                </div>
+              ))}
+          </section>
         ))}
       </div>
     </div>

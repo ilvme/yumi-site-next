@@ -1,4 +1,5 @@
 'use cache';
+import BlogHero from '@/components/BlogHero';
 import PostItem from '@/components/post/PostItem';
 import { databases, listPublishedPost } from '@/lib/notion';
 
@@ -20,12 +21,8 @@ export default async function EssaysPage() {
 
   return (
     <div className="container max-w-6xl py-3">
-      <div className="mb-6">
-        <h2 className="mb-2 text-2xl">随笔</h2>
-        <p className="text-base dark:text-gray-500">
-          记录我的所见、所闻、所思、所感。
-        </p>
-      </div>
+      <BlogHero title="随笔" description="记录我的所见、所闻、所思、所感。" />
+
       <div className="space-y-6">
         {years.map((year) => (
           <section key={year} className="">

@@ -1,10 +1,12 @@
 import friends from '@/app/_data/friends';
+import BlogHero from '@/components/BlogHero';
 import Link from 'next/link';
 
 export default async function AboutPage() {
   return (
-    <div className="">
-      <h2 className="py-4 text-xl font-bold">朋友</h2>
+    <div className="py-3">
+      <BlogHero title="朋友" description="欢迎交换友链" />
+
       {friends.map((friend) => (
         <Link
           key={friend.name}

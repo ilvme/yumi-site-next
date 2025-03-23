@@ -1,7 +1,9 @@
+import BlogHero from '@/components/BlogHero';
+
 export default async function NotesPage() {
   return (
-    <div className="container py-4">
-      <h1 className="mb-4 text-xl">技术笔记</h1>
+    <div className="py-3">
+      <BlogHero title="技术笔记" />
     </div>
   );
 }
