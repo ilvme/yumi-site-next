@@ -27,11 +27,11 @@ export default function Home() {
         <p className="py-3">
           喜欢在周末逛个超市，做点美食。偶尔小酌一杯。饿的时候只想吃咸香的，不习惯穿拖鞋，不喜欢吃饼干。
           偶尔打打游戏，一直在辅助的位置尝试着所有自认为有趣（快乐）的英雄，信奉快乐游戏的前提是：进入游戏的第一件事，键入{' '}
-          <code className="rounded-sm bg-[#ededeb] px-1 text-rose-400">
+          <code className="rounded-sm bg-[#ededeb] px-1 text-rose-400 dark:bg-[#2f2f2d]">
             /mute all
           </code>
           ，再按下{' '}
-          <code className="rounded-sm bg-[#ededeb] px-1 text-rose-400">
+          <code className="rounded-sm bg-[#ededeb] px-1 text-rose-400 dark:bg-[#2f2f2d]">
             Enter
           </code>
           。
@@ -41,21 +41,21 @@ export default function Home() {
           我在 Notion 里分享了一些
           <Link
             href="/essays"
-            className="underline decoration-rose-300 decoration-wavy decoration-2 hover:text-rose-400"
+            className="underline decoration-rose-400 decoration-wavy decoration-2 hover:text-rose-400"
           >
             日常随笔
           </Link>
           、
           <Link
             href="/notes"
-            className="underline decoration-rose-300 decoration-wavy decoration-2 hover:text-rose-400"
+            className="underline decoration-rose-400 decoration-wavy decoration-2 hover:text-rose-400"
           >
             技术笔记
           </Link>
           ，以及偶尔也会发发的
           <Link
             href="/notes"
-            className="underline decoration-rose-300 decoration-wavy decoration-2 hover:text-rose-400"
+            className="underline decoration-rose-400 decoration-wavy decoration-2 hover:text-rose-400"
           >
             牢骚
           </Link>
@@ -65,7 +65,7 @@ export default function Home() {
           最近 AI 的风终究是吹到了这里，借助 Trae 整了个
           <Link
             href="https://hot.ikangjia.cn"
-            className="underline decoration-rose-300 decoration-wavy decoration-2 hover:text-rose-400"
+            className="underline decoration-rose-400 decoration-wavy decoration-2 hover:text-rose-400"
           >
             新闻热点
           </Link>

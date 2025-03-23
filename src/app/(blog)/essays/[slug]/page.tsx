@@ -16,7 +16,7 @@ export default async function PostPage({ params }) {
               {postMeta.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-block bg-gray-100 px-3 py-1 text-sm dark:bg-gray-800"
+                  className="inline-block rounded-sm bg-gray-100 px-2 py-0.5 text-sm dark:bg-[#272727]"
                 >
                   # {tag}
                 </span>

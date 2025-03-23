@@ -1,12 +1,17 @@
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import { okaidia } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 
 const CodeBlock = ({ language, codeString }) => {
   return (
-    <SyntaxHighlighter language={language} style={vscDarkPlus} PreTag="div">
+    <SyntaxHighlighter
+      language={language}
+      showLineNumbers={true}
+      style={okaidia}
+      PreTag="div"
+    >
       {codeString}
     </SyntaxHighlighter>
   );
@@ -21,26 +26,35 @@ export default async function PostRender({ content }) {
         components={{
           blockquote(props) {
             return (
-              <blockquote className="text-rose-500 not-italic">
+              <blockquote className="border-l-[4px] border-l-rose-500 text-rose-500 not-italic">
                 {props.children}
               </blockquote>
             );
           },
           table(props) {
             return (
-              <table className="table-auto border-collapse border border-gray-400">
-                {props.children}
-              </table>
+              <table className="mx-auto max-w-[90%]">{props.children}</table>
             );
           },
           th(props) {
-            return <th className="border border-gray-300">{props.children}</th>;
+            return (
+              <th className="border border-[#e9e9e7] bg-[#f7f6f3] px-3 dark:border-[#2f2f2f] dark:bg-[#272727]">
+                {props.children}
+              </th>
+            );
           },
-          thead(props) {
-            return <thead className="bg-[#f3f4f6]">{props.children}</thead>;
+          td(props) {
+            return (
+              <td className="border border-[#e9e9e7] px-3 dark:border-[#2f2f2f]">
+                {props.children}
+              </td>
+            );
           },
           li(props) {
             return <li className="mt-0 mb-0">{props.children}</li>;
+          },
+          pre(props) {
+            return <pre className="p-0">{props.children}</pre>;
           },
           a(props) {
             return (
@@ -58,7 +72,7 @@ export default async function PostRender({ content }) {
               />
             ) : (
               <code
-                className="rounded-sm bg-[#ededeb] px-1.5 py-0.5 text-rose-400 before:content-none after:content-none dark:bg-[#292927]"
+                className="rounded-sm bg-[#ededeb] px-1.5 py-0.5 text-rose-400 before:content-none after:content-none dark:bg-[#2f2f2d]"
                 {...props}
               >
                 {children}

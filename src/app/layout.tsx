@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`m-auto flex min-h-screen max-w-[820px] flex-col ${myFont.className}`}
+        className={`m-auto flex min-h-screen max-w-[800px] flex-col ${myFont.className}`}
       >
         {children}
       </body>
