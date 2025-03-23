@@ -1,4 +1,6 @@
-export default async function WordCard({ word }) {
+import { Word } from '@/lib/notion-types';
+
+export default async function WordCard({ word }: { word: Word }) {
   return (
     <article
       key={word.id}

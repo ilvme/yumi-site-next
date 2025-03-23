@@ -3,6 +3,7 @@
 import BlogHero from '@/components/BlogHero';
 import WordCard from '@/components/word/WordCard';
 import { databases, listPublishedWords } from '@/lib/notion';
+import { Word } from '@/lib/notion-types';
 
 async function getWords() {
   const response = await listPublishedWords(databases.words);
@@ -60,8 +61,8 @@ export default async function WordsPage() {
                     </span>
                   </span>
                   <div className="flex flex-wrap gap-3">
-                    {wordsByYearMonth[year][month].map((word) => (
-                      <WordCard key={`${year}-${month}-${word}`} word={word} />
+                    {wordsByYearMonth[year][month].map((word: Word) => (
+                      <WordCard key={word.id} word={word} />
                     ))}
                   </div>
                 </div>

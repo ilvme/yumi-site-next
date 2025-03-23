@@ -1,4 +1,4 @@
-import { Post, PostList, PostMeta } from '@/lib/notion-types';
+import { Post, PostList, PostMeta, Word } from '@/lib/notion-types';
 import { Client } from '@notionhq/client';
 import { NotionToMarkdown } from 'notion-to-md';
 
@@ -64,9 +64,7 @@ export async function listPublishedPost(databaseId: string) {
       sorts: [{ property: 'publishedAt', direction: 'descending' }],
     });
     console.log('源数据', res);
-    const posts = res.results.map((item: any) =>
-      toPostMeta(item)
-    ) as PostMeta[];
+    const posts = res.results.map((item) => toPostMeta(item)) as PostMeta[];
 
     const result = {
       hasMore: res.has_more,
@@ -81,11 +79,11 @@ export async function listPublishedPost(databaseId: string) {
   }
 }
 
-export const toPostMeta = (item: any): PostMeta => ({
+export const toPostMeta = (item): PostMeta => ({
   id: item.id,
   title: item.properties.title?.title[0]?.plain_text || 'Untitled',
   slug: item.properties.slug?.rich_text[0]?.plain_text || item.id,
-  tags: item.properties.tags?.multi_select?.map((tag: any) => tag.name) || [],
+  tags: item.properties.tags?.multi_select?.map((tag) => tag.name) || [],
   category: item.properties.category?.select?.name,
   publishedAt: item.properties.publishedAt?.date?.start,
   published: item.properties.published?.checkbox,
@@ -108,7 +106,7 @@ export async function listPublishedWords(databaseId: string) {
       sorts: [{ property: '发布时间', direction: 'descending' }],
     });
     console.log('源数据', res);
-    const posts = [];
+    const posts: Word[] = [];
     res.results.forEach((item) => {
       const i = {
         id: item.id,
