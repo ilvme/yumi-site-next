@@ -52,7 +52,7 @@ export default async function WordsPage() {
             {Object.keys(wordsByYearMonth[year])
               .sort((a, b) => b - a)
               .map((month) => (
-                <div key={`${year}-${month}`} className="ml-4 space-y-2">
+                <div key={`${year}-${month}`} className="space-y-2">
                   <span className="text-base font-medium text-gray-600 dark:text-gray-400">
                     {month} 月{' '}
                     <span className="text-sm font-normal text-gray-500">
