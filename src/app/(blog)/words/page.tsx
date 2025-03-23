@@ -18,13 +18,13 @@ export default async function WordsPage() {
           一句话叙当前所历之事，一句话抒此刻难言之情，一句话吐所遇违心之槽。
         </p>
       </div>
-      <div className="flex flex-wrap gap-3">
+      <div className={`flex flex-wrap gap-3`}>
         {words.map((word) => (
           <article
             key={word.id}
             className="flex max-w-[300px] flex-col justify-between gap-3 rounded-lg border border-gray-200 px-2 py-3 dark:border-gray-800"
           >
-            <p className="text-sm text-gray-800 dark:text-rose-200">
+            <p className="text-base text-gray-800 dark:text-rose-200">
               {word.content}
             </p>
             <span className="text-right text-xs text-gray-500">
