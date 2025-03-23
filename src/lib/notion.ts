@@ -3,18 +3,16 @@ import { Client } from '@notionhq/client';
 import { NotionToMarkdown } from 'notion-to-md';
 
 export const notion = new Client({
-  auth: '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',
+  auth: process.env.NOTIONS_AUTH,
 });
 
 export const n2m = new NotionToMarkdown({ notionClient: notion });
 
 export const databases = {
-  essays: '76b60dd049a34d1f995701cfce25c13e',
-  words: '1a4c485ef35680f18abdf460c74835e4',
+  essays: process.env.NOTION_ESSAYS_DB_ID,
+  words: process.env.NOTION_WORDS_DB_ID,
   notes: process.env.NOTION_NOTES_DB_ID,
-  toolchains: process.env.NOTION_TOOLCHAINS_DB_ID,
-  about: process.env.NOTION_ABOUT_PAGE_ID,
-  links: process.env.NOTION_LINKS_DB_ID,
+  friends: process.env.NOTION_FRIENDS_DB_ID,
 } as const;
 
 // 通过 slug 获取文章信息
