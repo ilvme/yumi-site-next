@@ -1,3 +1,5 @@
+'use cache';
+
 import { databases, listPublishedWords } from '@/lib/notion';
 
 async function getWords() {

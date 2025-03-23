@@ -1,3 +1,4 @@
+'use cache';
 import PostItem from '@/components/post/PostItem';
 import { databases, listPublishedPost } from '@/lib/notion';
 

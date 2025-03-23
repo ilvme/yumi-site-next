@@ -1,3 +1,4 @@
+'use cache';
 import PostRender from '@/components/post/PostRender';
 import { getPostBySlug } from '@/lib/notion';
 
