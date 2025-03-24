@@ -17,7 +17,13 @@ export default function Comment() {
       reactionsEnabled="1"
       emitMetadata="0"
       inputPosition="top"
-      theme={theme === 'dark' ? 'dark' : 'light'}
+      theme={
+        theme === 'dark'
+          ? 'dark'
+          : theme === 'light'
+            ? 'light'
+            : 'preferred_color_scheme'
+      }
       lang="zh-CN"
       loading="lazy"
     />
