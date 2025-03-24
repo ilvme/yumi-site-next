@@ -3,11 +3,10 @@
 import friends, { FriendItem } from '@/app/_data/friends';
 import BlogHero from '@/components/BlogHero';
 import { Button } from '@/components/ui/button';
-import Comment from '@/components/website/Comment';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
-export default function AboutPage() {
+export default function FriendsPage() {
   const Friend = (friend: FriendItem) => {
     return (
       <div className="flex items-center">
@@ -25,10 +24,7 @@ export default function AboutPage() {
     );
   };
 
-  const [commentShow, setCommentShow] = useState(false);
-  const toggleComment = () => {
-    setCommentShow(!commentShow);
-  };
+  const router = useRouter();
 
   return (
     <div className="py-3">
@@ -37,14 +33,16 @@ export default function AboutPage() {
         description="欢迎交换友链，申请请点击页面最下方「申请友链」链接。"
       />
 
-      {friends.map((friend) => (
-        <Friend key={friend.name} {...friend} />
-      ))}
+      {friends
+        .filter((item) => !item.hidden)
+        .map((friend) => (
+          <Friend key={friend.name} {...friend} />
+        ))}
 
       <hr className="mt-5 mb-8" />
-      <Button onClick={toggleComment}>申请友链</Button>
-
-      {commentShow && <Comment />}
+      <Button onClick={() => router.push('/friends/application')}>
+        申请友链
+      </Button>
     </div>
   );
 }
