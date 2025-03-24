@@ -1,4 +1,4 @@
-export default async function BlogHero({
+export default function BlogHero({
   title,
   description,
 }: {

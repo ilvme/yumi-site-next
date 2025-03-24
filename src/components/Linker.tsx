@@ -1,12 +1,6 @@
 import Link from 'next/link';
 
-export default async function Linker({
-  text,
-  href,
-}: {
-  text: string;
-  href: string;
-}) {
+export default function Linker({ text, href }: { text: string; href: string }) {
   return (
     <Link
       href={href}
