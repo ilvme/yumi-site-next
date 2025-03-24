@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="zh" suppressHydrationWarning>
       <body
-        className={`m-auto flex min-h-screen max-w-[900px] flex-col ${myFont.className}`}
+        className={`m-auto flex min-h-screen max-w-[880px] flex-col ${myFont.className}`}
       >
         <ThemeProvider
           attribute="class"

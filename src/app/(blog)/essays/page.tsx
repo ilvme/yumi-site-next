@@ -20,7 +20,7 @@ export default async function EssaysPage() {
   const years = Object.keys(postsByYear).sort((a, b) => b - a);
 
   return (
-    <div className="container max-w-6xl py-3">
+    <div className="py-3">
       <BlogHero title="随笔" description="记录我的所见、所闻、所思、所感。" />
 
       <div className="space-y-6">
