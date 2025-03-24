@@ -12,7 +12,6 @@ export const databases = {
   essays: process.env.NOTION_ESSAYS_DB_ID,
   words: process.env.NOTION_WORDS_DB_ID,
   notes: process.env.NOTION_NOTES_DB_ID,
-  friends: process.env.NOTION_FRIENDS_DB_ID,
 } as const;
 
 // 通过 slug 获取文章信息
