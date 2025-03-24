@@ -4,6 +4,9 @@ const nextConfig: NextConfig = {
   experimental: {
     useCache: true,
   },
+  images: {
+    remotePatterns: [],
+  },
 
   eslint: {
     // Warning: This allows production builds to successfully complete even if

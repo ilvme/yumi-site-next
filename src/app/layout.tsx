@@ -1,3 +1,4 @@
+import { ThemeProvider } from '@/components/website/ThemeProvider';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import React from 'react';
@@ -18,11 +19,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="zh" suppressHydrationWarning>
       <body
         className={`m-auto flex min-h-screen max-w-[800px] flex-col ${myFont.className}`}
       >
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

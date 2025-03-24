@@ -1,6 +1,9 @@
 import BlogHero from '@/components/BlogHero';
 import Sponsor from '@/components/Sponsor';
 import Link from 'next/link';
+import { FaRegAddressCard } from 'react-icons/fa';
+import { IoMail } from 'react-icons/io5';
+import { SiGithub, SiZhihu } from 'react-icons/si';
 
 export default async function AboutPage() {
   return (
@@ -12,10 +15,24 @@ export default async function AboutPage() {
       如见首页。
       <h2 className="mt-4 mb-3 text-2xl font-bold">find me</h2>
       <div className="flex items-center gap-8">
-        <Link href="https://github.com/ilvme">GitHub</Link>
-        <Link href="/">知乎</Link>
-        <Link href="/">简历</Link>
-        <Link href="mailto:ikangjia.cn@outlook.com">发邮件</Link>
+        <Link
+          href="https://github.com/ilvme"
+          className="flex items-center gap-1.5"
+        >
+          <SiGithub size={20} /> GitHub
+        </Link>
+        <Link href="/" className="flex items-center gap-1.5">
+          <SiZhihu /> 知乎
+        </Link>
+        <Link href="/" className="flex items-center gap-1.5">
+          <FaRegAddressCard /> 简历
+        </Link>
+        <Link
+          href="mailto:ikangjia.cn@outlook.com"
+          className="flex items-center gap-1.5"
+        >
+          <IoMail /> 发邮件
+        </Link>
       </div>
       <Sponsor />
     </div>

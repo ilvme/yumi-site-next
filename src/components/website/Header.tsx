@@ -1,4 +1,5 @@
 import navItems from '@/app/_data/nav';
+import { ThemeToggle } from '@/components/website/ThemeToggle';
 import Link from 'next/link';
 
 export default function Header() {
@@ -8,7 +9,7 @@ export default function Header() {
         <Link href="/" className="flex items-center">
           <span className="text-3xl font-bold">林深时觉寒</span>
         </Link>
-        <nav className="space-x-6 text-base font-medium md:flex">
+        <nav className="flex items-center space-x-6 text-base font-medium">
           {navItems.map((item) => (
             <Link key={item.href} href={item.href} className="">
               <span className="text-lg font-bold text-gray-600 hover:text-rose-500 dark:text-[#c7cbd2]">
@@ -16,6 +17,8 @@ export default function Header() {
               </span>
             </Link>
           ))}
+
+          <ThemeToggle />
         </nav>
       </div>
     </header>
