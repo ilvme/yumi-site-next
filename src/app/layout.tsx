@@ -6,7 +6,34 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: '林深时觉寒',
-  description: 'A personal blog built with Next.js and Notion',
+  description: '林深时觉寒的个人网站',
+  authors: [
+    {
+      name: '林深时觉寒',
+      url: 'https://ikangjia.cn',
+    },
+  ],
+  icons: [
+    {
+      url: '/images/avatar-old.png',
+      sizes: '16x16',
+      type: 'image/png',
+    },
+  ],
+  keywords: [
+    '林深时觉寒',
+    'ilvme',
+    '博客',
+    'Blog',
+    '个人网站',
+    '主页',
+    'Homepage',
+    '技术',
+    '前端',
+    '后端',
+    '全栈',
+    'Notion',
+  ],
 };
 
 const myFont = localFont({
