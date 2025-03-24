@@ -18,7 +18,7 @@ export default function Home() {
               width="160"
               height="160"
               className="rounded-full"
-              src="/avatar.png"
+              src="/images/avatar.png"
               alt="avatar"
             />
             <h1 className="mt-5 text-2xl font-bold">
