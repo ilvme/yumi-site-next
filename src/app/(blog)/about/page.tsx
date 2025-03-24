@@ -21,10 +21,13 @@ export default async function AboutPage() {
         >
           <SiGithub size={20} /> GitHub
         </Link>
-        <Link href="/" className="flex items-center gap-1.5">
+        <Link
+          href="https://www.zhihu.com/people/ikangjia"
+          className="flex items-center gap-1.5"
+        >
           <SiZhihu /> 知乎
         </Link>
-        <Link href="/" className="flex items-center gap-1.5">
+        <Link href="/resume" className="flex items-center gap-1.5">
           <FaRegAddressCard /> 简历
         </Link>
         <Link
