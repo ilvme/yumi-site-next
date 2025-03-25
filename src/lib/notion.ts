@@ -3,10 +3,7 @@ import { Client } from '@notionhq/client';
 import { NotionToMarkdown } from 'notion-to-md';
 import { SITE_CONFIG } from '../../yumi.config';
 
-export const notion = new Client({
-  auth: SITE_CONFIG.notion_token,
-});
-
+export const notion = new Client({ auth: SITE_CONFIG.notion_token });
 export const n2m = new NotionToMarkdown({ notionClient: notion });
 
 // 通过 slug 获取文章信息
@@ -48,7 +45,7 @@ export async function listPublishedPost(databaseId: string) {
   try {
     const res = await notion.databases.query({
       database_id: databaseId,
-      // page_size: 20,
+      page_size: 10,
       // filter: {
       //   property: 'published',
       //   checkbox: {
@@ -132,4 +129,26 @@ export async function getResumeStr() {
   const mdString = n2m.toMarkdownString(mdBlocks);
 
   return mdString.parent;
+}
+
+//
+export async function reqSearchPostsByTitle(searchText: string) {
+  if (!SITE_CONFIG.notes_db_id) {
+    return;
+  }
+
+  const res = await notion.databases.query({
+    database_id: SITE_CONFIG.notes_db_id,
+    filter: {
+      property: 'title',
+      title: {
+        contains: searchText,
+      },
+    },
+  });
+  console.log('search', res);
+  console.log(
+    'search-results',
+    res.results.map((item) => item.properties.title.title[0].plain_text)
+  );
 }
