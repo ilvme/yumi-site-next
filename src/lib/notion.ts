@@ -70,6 +70,41 @@ export async function listPublishedPost(databaseId: string) {
   }
 }
 
+// 获取指定数据库下所有文章，突破分页限制
+export async function listPublishedPostAll(databaseId: string) {
+  try {
+    const allPosts: PostMeta[] = [];
+    let hasMore = true;
+    let nextCursor: string | null = undefined;
+
+    while (hasMore) {
+      const res = await notion.databases.query({
+        database_id: databaseId,
+        page_size: 10,
+        start_cursor: nextCursor,
+        sorts: [{ property: 'publishedAt', direction: 'descending' }],
+      });
+
+      const posts = res.results.map((item) => toPostMeta(item));
+      allPosts.push(...posts);
+
+      hasMore = res.has_more;
+      nextCursor = res.next_cursor;
+    }
+
+    const result = {
+      hasMore: false,
+      nextCursor: null,
+      posts: allPosts,
+    };
+    console.log('获取所有文章列表完成，总数：', allPosts.length);
+    return result as PostList;
+  } catch (error) {
+    console.error('Error fetching all posts:', error);
+    throw error;
+  }
+}
+
 export const toPostMeta = (item): PostMeta => ({
   id: item.id,
   title: item.properties.title?.title[0]?.plain_text || 'Untitled',
