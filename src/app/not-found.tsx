@@ -1,11 +1,11 @@
-import Link from 'next/link';
+import Linker from '@/components/Linker';
 
 export default function NotFound() {
   return (
-    <div>
-      <h2>Not Found</h2>
-      <p>Could not find requested resource</p>
-      <Link href="/">Return Home</Link>
+    <div className="flex flex-col items-center space-y-2 py-20 text-xl">
+      <h2 className="text-3xl">Oh~</h2>
+      <p>你到了没有知识的荒原~</p>
+      <Linker href="/" text="带我回家" />
     </div>
   );
 }
