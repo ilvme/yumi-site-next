@@ -1,13 +1,20 @@
 'use cache';
 import BlogHero from '@/components/BlogHero';
 import NoteItem from '@/components/post/NoteItem';
-import { listPublishedPost, reqSearchPostsByTitle } from '@/lib/notion';
+import { listPublishedPost } from '@/lib/notion';
 import { SITE_CONFIG } from '../../../../yumi.config';
 
 export default async function NotesPage() {
-  const posts = await listPublishedPost(SITE_CONFIG.essays_db_id);
-
-  await reqSearchPostsByTitle('不');
+  const { posts, nextCursor, hasMore } = await listPublishedPost(
+    SITE_CONFIG.essays_db_id,
+    {
+      sorts: [{ property: 'publishedAt', direction: 'descending' }],
+      pageSize: 5,
+    }
+  );
+  const currentPage = 1;
+  const total = Math.ceil(posts.length / 5);
+  // await reqSearchPostsByTitle('不');
 
   const categories = [
     { name: '所有', slug: 'all' },
@@ -36,9 +43,20 @@ export default async function NotesPage() {
       </div>
 
       <div>
-        {posts.posts.map((note) => (
+        {posts.map((note) => (
           <NoteItem key={note.id} note={note} />
         ))}
+      </div>
+
+      {/* 分页设计 */}
+      <div className="mt-5 flex justify-center gap-5 text-xl">
+        <a href="#" className="text-gray-500 hover:text-gray-700">
+          上一页
+        </a>
+        {currentPage} / {total}
+        <a href="#" className="text-gray-500 hover:text-gray-700">
+          下一页
+        </a>
       </div>
     </div>
   );

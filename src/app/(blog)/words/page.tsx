@@ -7,8 +7,7 @@ import { Word } from '@/lib/notion-types';
 import { SITE_CONFIG } from '../../../../yumi.config';
 
 async function getWords() {
-  const response = await listPublishedWords(SITE_CONFIG.words_db_id);
-  const words = response.posts;
+  const words = await listPublishedWords(SITE_CONFIG.words_db_id);
 
   // 按年份和月份分组
   const wordsByYearMonth = words.reduce((acc, word) => {

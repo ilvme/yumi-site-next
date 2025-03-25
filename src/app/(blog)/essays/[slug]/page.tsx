@@ -1,6 +1,7 @@
 'use cache';
 import PostRender from '@/components/post/PostRender';
 import { getPostBySlug } from '@/lib/notion';
+import { SITE_CONFIG } from '../../../../../yumi.config';
 
 export default async function PostPage({
   params,
@@ -9,7 +10,7 @@ export default async function PostPage({
 }) {
   const { slug } = await params;
 
-  const { content, postMeta } = await getPostBySlug(slug);
+  const { content, postMeta } = await getPostBySlug(SITE_CONFIG.essays_db_id ,slug);
 
   return (
     <div className="mx-auto py-4">

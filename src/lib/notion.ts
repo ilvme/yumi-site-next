@@ -7,9 +7,9 @@ export const notion = new Client({ auth: SITE_CONFIG.notion_token });
 export const n2m = new NotionToMarkdown({ notionClient: notion });
 
 // 通过 slug 获取文章信息
-export async function getPostBySlug(slug: string) {
+export async function getPostBySlug(databaseId: string, slug: string) {
   const response = await notion.databases.query({
-    database_id: SITE_CONFIG.essays_db_id,
+    database_id: databaseId,
     filter: {
       property: 'slug',
       formula: {
@@ -19,7 +19,6 @@ export async function getPostBySlug(slug: string) {
       },
     },
   });
-  console.log('文章信息', response);
 
   if (response.results.length === 0) {
     return null;
@@ -41,20 +40,24 @@ export async function getPostBySlug(slug: string) {
 }
 
 // 获取指定数据库下所有已发布的文章，有分页限制，最大100条
-export async function listPublishedPost(databaseId: string) {
+export async function listPublishedPost(
+  databaseId: string,
+  options?: {
+    sorts?: any;
+    pageSize?: number;
+    filter?: any;
+    startCursor?: string;
+  }
+) {
   try {
     const res = await notion.databases.query({
       database_id: databaseId,
-      page_size: 10,
-      // filter: {
-      //   property: 'published',
-      //   checkbox: {
-      //     equals: true,
-      //   },
-      // },
-      sorts: [{ property: 'publishedAt', direction: 'descending' }],
+      page_size: options?.pageSize || 10,
+      start_cursor: options?.startCursor,
+      filter: options?.filter,
+      sorts: options?.sorts,
     });
-    console.log('源数据', res);
+
     const posts = res.results.map((item) => toPostMeta(item)) as PostMeta[];
 
     const result = {
@@ -62,47 +65,21 @@ export async function listPublishedPost(databaseId: string) {
       nextCursor: res.next_cursor,
       posts,
     };
-    console.log('文章列表信息', result);
+
     return result as PostList;
   } catch (error) {
-    console.error('Error fetching database:', error);
+    console.error('分页获取文章列表失败:', error);
     throw error;
   }
 }
 
 // 获取指定数据库下所有文章，突破分页限制
-export async function listPublishedPostAll(databaseId: string) {
-  try {
-    const allPosts: PostMeta[] = [];
-    let hasMore = true;
-    let nextCursor: string | null = undefined;
-
-    while (hasMore) {
-      const res = await notion.databases.query({
-        database_id: databaseId,
-        page_size: 10,
-        start_cursor: nextCursor,
-        sorts: [{ property: 'publishedAt', direction: 'descending' }],
-      });
-
-      const posts = res.results.map((item) => toPostMeta(item));
-      allPosts.push(...posts);
-
-      hasMore = res.has_more;
-      nextCursor = res.next_cursor;
-    }
-
-    const result = {
-      hasMore: false,
-      nextCursor: null,
-      posts: allPosts,
-    };
-    console.log('获取所有文章列表完成，总数：', allPosts.length);
-    return result as PostList;
-  } catch (error) {
-    console.error('Error fetching all posts:', error);
-    throw error;
-  }
+export async function listPublishedEssays(databaseId: string) {
+  const allPages = await listAllPages(databaseId, {
+    sorts: [{ property: 'publishedAt', direction: 'descending' }],
+  });
+  const posts = allPages.map((item) => toPostMeta(item));
+  return posts;
 }
 
 export const toPostMeta = (item): PostMeta => ({
@@ -117,74 +94,20 @@ export const toPostMeta = (item): PostMeta => ({
   summary: item.properties.summary?.rich_text[0]?.plain_text,
 });
 
-// 获取指定数据库下所有已发布的文章，带分页，最多 100 条
+// 获取所有发布的说说
 export async function listPublishedWords(databaseId: string) {
-  try {
-    const res = await notion.databases.query({
-      database_id: databaseId,
-      page_size: 200,
-      // filter: {
-      //   property: 'published',
-      //   checkbox: {
-      //     equals: true,
-      //   },
-      // },
-      sorts: [{ property: '发布时间', direction: 'descending' }],
-    });
-    console.log('源数据', res);
-    const posts: Word[] = [];
-    res.results.forEach((item) => {
-      const i = {
-        id: item.id,
-        content: item.properties.Title.title[0]?.plain_text || 'Untitled',
-        createAt: item.properties[`发布时间`].formula.date.start,
-      };
-      posts.push(i);
-    });
+  const allPages = await listAllPages(databaseId, {
+    sorts: [{ property: '发布时间', direction: 'descending' }],
+  });
 
-    const result = {
-      hasMore: res.has_more,
-      nextCursor: res.next_cursor,
-      posts,
+  const allWords: Word[] = allPages.map((item) => {
+    return {
+      id: item.id,
+      content: item.properties.Title.title[0]?.plain_text || 'Untitled',
+      createAt: item.properties[`发布时间`].formula.date.start,
     };
-    console.log('文章列表信息', result);
-    return result;
-  } catch (error) {
-    console.error('Error fetching database:', error);
-    throw error;
-  }
-}
-
-// 获取指定数据库下所有已发布的文章
-export async function listPublishedWordsPlus(databaseId: string) {
-  try {
-    const res = await notion.databases.query({
-      database_id: databaseId,
-      page_size: 200,
-      sorts: [{ property: '发布时间', direction: 'descending' }],
-    });
-    console.log('源数据', res);
-    const posts: Word[] = [];
-    res.results.forEach((item) => {
-      const i = {
-        id: item.id,
-        content: item.properties.Title.title[0]?.plain_text || 'Untitled',
-        createAt: item.properties[`发布时间`].formula.date.start,
-      };
-      posts.push(i);
-    });
-
-    const result = {
-      hasMore: res.has_more,
-      nextCursor: res.next_cursor,
-      posts,
-    };
-    console.log('文章列表信息', result);
-    return result;
-  } catch (error) {
-    console.error('Error fetching database:', error);
-    throw error;
-  }
+  });
+  return allWords;
 }
 
 // 获取简历
@@ -218,4 +141,41 @@ export async function reqSearchPostsByTitle(searchText: string) {
     'search-results',
     res.results.map((item) => item.properties.title.title[0].plain_text)
   );
+}
+
+// 获取指定数据库下所有页面，支持自定义查询参数
+export async function listAllPages(
+  databaseId: string,
+  options?: {
+    filter?: any;
+    sorts?: any;
+    pageSize?: number;
+  }
+) {
+  try {
+    const allPages = [];
+    let hasMore = true;
+    let nextCursor: string | null = undefined;
+
+    while (hasMore) {
+      const res = await notion.databases.query({
+        database_id: databaseId,
+        page_size: options?.pageSize || 100,
+        start_cursor: nextCursor,
+        filter: options?.filter,
+        sorts: options?.sorts,
+      });
+
+      allPages.push(...res.results);
+
+      hasMore = res.has_more;
+      nextCursor = res.next_cursor;
+    }
+
+    console.log(`获取所有页面完成，总数：${allPages.length}`);
+    return allPages;
+  } catch (error) {
+    console.error('Error fetching all pages:', error);
+    throw error;
+  }
 }

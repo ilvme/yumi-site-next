@@ -1,14 +1,14 @@
 'use cache';
 import BlogHero from '@/components/BlogHero';
 import PostItem from '@/components/post/PostItem';
-import { listPublishedPostAll } from '@/lib/notion';
+import { listPublishedEssays } from '@/lib/notion';
 import { SITE_CONFIG } from '../../../../yumi.config';
 
 export default async function EssaysPage() {
-  const posts = await listPublishedPostAll(SITE_CONFIG.essays_db_id);
+  const posts = await listPublishedEssays(SITE_CONFIG.essays_db_id);
 
   // 按年份分组文章
-  const postsByYear = posts.posts.reduce((acc, post) => {
+  const postsByYear = posts.reduce((acc, post) => {
     const year = new Date(post.publishedAt).getFullYear();
     if (!acc[year]) {
       acc[year] = [];
