@@ -40,7 +40,7 @@ export async function getPostBySlug(slug: string) {
   return post;
 }
 
-// 获取指定数据库下所有已发布的文章
+// 获取指定数据库下所有已发布的文章，有分页限制，最大100条
 export async function listPublishedPost(databaseId: string) {
   try {
     const res = await notion.databases.query({
@@ -82,7 +82,7 @@ export const toPostMeta = (item): PostMeta => ({
   summary: item.properties.summary?.rich_text[0]?.plain_text,
 });
 
-// 获取指定数据库下所有已发布的文章
+// 获取指定数据库下所有已发布的文章，带分页，最多 100 条
 export async function listPublishedWords(databaseId: string) {
   try {
     const res = await notion.databases.query({
@@ -94,6 +94,38 @@ export async function listPublishedWords(databaseId: string) {
       //     equals: true,
       //   },
       // },
+      sorts: [{ property: '发布时间', direction: 'descending' }],
+    });
+    console.log('源数据', res);
+    const posts: Word[] = [];
+    res.results.forEach((item) => {
+      const i = {
+        id: item.id,
+        content: item.properties.Title.title[0]?.plain_text || 'Untitled',
+        createAt: item.properties[`发布时间`].formula.date.start,
+      };
+      posts.push(i);
+    });
+
+    const result = {
+      hasMore: res.has_more,
+      nextCursor: res.next_cursor,
+      posts,
+    };
+    console.log('文章列表信息', result);
+    return result;
+  } catch (error) {
+    console.error('Error fetching database:', error);
+    throw error;
+  }
+}
+
+// 获取指定数据库下所有已发布的文章
+export async function listPublishedWordsPlus(databaseId: string) {
+  try {
+    const res = await notion.databases.query({
+      database_id: databaseId,
+      page_size: 200,
       sorts: [{ property: '发布时间', direction: 'descending' }],
     });
     console.log('源数据', res);
