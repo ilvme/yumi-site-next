@@ -25,7 +25,8 @@ export default function FriendApplicationPage() {
 
       <h1 className="text-3xl font-bold">申请友链</h1>
       <p className="text-base">
-        如果你也有网站、博客、个人主页，欢迎交换友链！请参考以下格式：
+        如果你也有网站、博客、个人主页，欢迎交换友链！
+        <p>请参考以下格式在下方进行评论：</p>
       </p>
       <SyntaxHighlighter
         customStyle={{
