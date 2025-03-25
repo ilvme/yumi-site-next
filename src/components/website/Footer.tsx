@@ -7,23 +7,26 @@ export default function Footer() {
       {new Date().getFullYear()}
       <div>
         Powered by{' '}
-        <Link href="/public" className="underline">
+        <Link href="https://nextjs.org/" className="underline">
           Next.js
         </Link>
         ,{' '}
-        <Link href="/public" className="underline">
+        <Link href="https://tailwindcss.com/" className="underline">
           Tailwindcss
         </Link>
         ,{' '}
-        <Link href="/public" className="underline">
+        <Link href="https://www.notion.com/zh-cn" className="underline">
           Notion
         </Link>
         ,
-        <Link href="/public" className="underline">
+        <Link href="https://vercel.com" className="underline">
           Vercel
         </Link>
         . View Source on{' '}
-        <Link href="/public" className="underline">
+        <Link
+          href="https://github.com/ilvme/yumi-site-next"
+          className="underline"
+        >
           GitHub
         </Link>
         .
