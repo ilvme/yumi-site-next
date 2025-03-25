@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { IoHome, IoMail } from 'react-icons/io5';
 import { SiGithub, SiZhihu } from 'react-icons/si';
 import AvatarBack from '../../public/images/avatar.png';
+import { SITE_CONFIG } from '../../yumi.config';
 
 export default function Home() {
   return (
@@ -22,7 +23,7 @@ export default function Home() {
             />
 
             <h1 className="mt-5 text-2xl font-bold">
-              <span className="">林深时觉寒</span>
+              <span className="">{SITE_CONFIG.title}</span>
             </h1>
 
             <div className="mt-2 text-sm">
@@ -38,13 +39,13 @@ export default function Home() {
                 icon={<IoHome size={22} />}
               />
               <IconLinker
-                href="https://github.com/ilvme"
+                href={SITE_CONFIG.social.github}
                 icon={<SiGithub size={22} />}
               />
 
               <IconLinker href="/" icon={<SiZhihu size={22} />} />
               <IconLinker
-                href="mailto:ikangjia.cn@outlook.com"
+                href={`mailto:${SITE_CONFIG.email}`}
                 icon={<IoMail size={22} />}
               />
             </div>

@@ -2,15 +2,16 @@ import { ThemeProvider } from '@/components/website/ThemeProvider';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import React from 'react';
+import { SITE_CONFIG } from '../../yumi.config';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: '林深时觉寒',
-  description: '林深时觉寒的个人网站',
+  title: SITE_CONFIG.title,
+  description: SITE_CONFIG.description,
   authors: [
     {
-      name: '林深时觉寒',
-      url: 'https://ikangjia.cn',
+      name: SITE_CONFIG.author,
+      url: SITE_CONFIG.url,
     },
   ],
   icons: [
