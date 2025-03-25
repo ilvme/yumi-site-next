@@ -1,23 +1,18 @@
 import { Post, PostList, PostMeta, Word } from '@/lib/notion-types';
 import { Client } from '@notionhq/client';
 import { NotionToMarkdown } from 'notion-to-md';
+import { SITE_CONFIG } from '../../yumi.config';
 
 export const notion = new Client({
-  auth: process.env.NOTION_AUTH,
+  auth: SITE_CONFIG.notion_token,
 });
 
 export const n2m = new NotionToMarkdown({ notionClient: notion });
 
-export const databases = {
-  essays: process.env.NOTION_ESSAYS_DB_ID,
-  words: process.env.NOTION_WORDS_DB_ID,
-  notes: process.env.NOTION_NOTES_DB_ID,
-} as const;
-
 // 通过 slug 获取文章信息
 export async function getPostBySlug(slug: string) {
   const response = await notion.databases.query({
-    database_id: databases.essays,
+    database_id: SITE_CONFIG.essays_db_id,
     filter: {
       property: 'slug',
       formula: {
@@ -130,10 +125,10 @@ export async function listPublishedWords(databaseId: string) {
 
 // 获取简历
 export async function getResumeStr() {
-  if (!process.env.NOTION_RESUME_PAGE_ID) {
+  if (!SITE_CONFIG.resume_page_id) {
     return;
   }
-  const mdBlocks = await n2m.pageToMarkdown(process.env.NOTION_RESUME_PAGE_ID);
+  const mdBlocks = await n2m.pageToMarkdown(SITE_CONFIG.resume_page_id);
   const mdString = n2m.toMarkdownString(mdBlocks);
 
   return mdString.parent;
