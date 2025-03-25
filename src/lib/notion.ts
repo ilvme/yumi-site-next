@@ -127,3 +127,14 @@ export async function listPublishedWords(databaseId: string) {
     throw error;
   }
 }
+
+// 获取简历
+export async function getResumeStr() {
+  if (!process.env.NOTION_RESUME_PAGE_ID) {
+    return;
+  }
+  const mdBlocks = await n2m.pageToMarkdown(process.env.NOTION_RESUME_PAGE_ID);
+  const mdString = n2m.toMarkdownString(mdBlocks);
+
+  return mdString.parent;
+}

@@ -1,36 +1,30 @@
+import Linker from '@/components/Linker';
 import PostRender from '@/components/post/PostRender';
-import fs from 'fs/promises';
+import { getResumeStr } from '@/lib/notion';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: `康佳的简历`,
+  description: '康佳的简历',
 };
 
-// function generateDownloadLink(href) {
-//   const link = document.createElement('a');
-//   link.href = href;
-//
-//   const fileType = href.slice(href.lastIndexOf('.') + 1);
-//
-//   link.download = `康佳-后端-18232110170.${fileType}`;
-//   link.className = `pin ${fileType}_downloader`;
-//   link.innerText = fileType.toUpperCase();
-//
-//   document.getElementsByTagName('body')[0].appendChild(link);
-// }
-
 export default async function Resume() {
-  const resumeStr = await fs.readFile(
-    `${process.cwd()}/src/app/(resume)/resume/resume.md`,
-    'utf-8'
-  );
-
-  const str = await fetch('/resume/resume.md');
-  console.log(str);
+  const resumeStr = await getResumeStr();
 
   return (
     <div className="pt-16 pb-32">
-      <PostRender content={resumeStr} />
+      {resumeStr ? (
+        <PostRender content={resumeStr} />
+      ) : (
+        <>
+          <div className="flex flex-col items-center justify-center">
+            <div className="py-8 text-3xl font-bold">
+              简历页面正在努力开发中...
+            </div>
+            <Linker href="/about" text="先返回网站查看其他精彩内容吧~" />
+          </div>
+        </>
+      )}
     </div>
   );
 }

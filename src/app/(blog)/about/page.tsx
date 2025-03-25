@@ -27,7 +27,11 @@ export default async function AboutPage() {
         >
           <SiZhihu /> 知乎
         </Link>
-        <Link href="/resume" className="flex items-center gap-1.5">
+        <Link
+          href="/resume"
+          className="flex items-center gap-1.5"
+          target="_blank"
+        >
           <FaRegAddressCard /> 简历
         </Link>
         <Link
