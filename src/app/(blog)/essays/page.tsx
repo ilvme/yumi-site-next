@@ -5,7 +5,9 @@ import { listPublishedEssays } from '@/lib/notion';
 import { SITE_CONFIG } from '../../../../yumi.config';
 
 export default async function EssaysPage() {
-  const posts = await listPublishedEssays(SITE_CONFIG.essays_db_id);
+  const posts = await listPublishedEssays(SITE_CONFIG.essays_db_id, {
+    sorts: [{ property: 'publishedAt', direction: 'descending' }],
+  });
 
   // 按年份分组文章
   const postsByYear = posts.reduce((acc, post) => {

@@ -74,16 +74,21 @@ export async function listPublishedPost(
 }
 
 // 获取指定数据库下所有文章，突破分页限制
-export async function listPublishedEssays(databaseId: string) {
-  const allPages = await listAllPages(databaseId, {
-    sorts: [{ property: 'publishedAt', direction: 'descending' }],
-  });
-  const posts = allPages.map((item) => toPostMeta(item));
-  return posts;
+export async function listPublishedEssays(
+  databaseId: string,
+  options?: {
+    filter?: any;
+    sorts?: any;
+    pageSize?: number;
+  }
+) {
+  const allPages = await listAllPages(databaseId, options);
+  return allPages.map((item) => toPostMeta(item));
 }
 
-export const toPostMeta = (item): PostMeta => ({
+export const toPostMeta = (item) => ({
   id: item.id,
+  icon: item.icon.emoji,
   title: item.properties.title?.title[0]?.plain_text || 'Untitled',
   slug: item.properties.slug?.rich_text[0]?.plain_text || item.id,
   tags: item.properties.tags?.multi_select?.map((tag) => tag.name) || [],
