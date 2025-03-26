@@ -2,22 +2,25 @@ import Link from 'next/link';
 
 export default async function NoteItem({ note }) {
   return (
-    <div key={note.id} className="flex items-center gap-5 p-0.5">
-      <span className="text-sm text-gray-400">{note.publishedAt}</span>
-      <Link
-        className="text-gray-600 hover:text-rose-500 hover:underline dark:text-gray-300"
-        href={`/notes/${note.slug}`}
-      >
-        {note.title}
-      </Link>
+    <Link href={`/notes/${note.slug}`}>
+      <div className="flex h-[160px] flex-col justify-between rounded-xl border border-rose-100 px-3 py-2 shadow-md hover:scale-105 hover:shadow-md dark:border-rose-800">
+        <h2 className="flex space-x-2">
+          <span>{note.icon}</span>
+          <span className="hover:cursor-pointer hover:text-rose-500 dark:text-gray-300 hover:dark:text-rose-600">
+            {note.title}
+          </span>
+        </h2>
 
-      <div>
-        <span className="space-x-2 text-sm text-gray-400">
-          {note.tags.map((tag) => (
-            <span key={tag}>#{tag}</span>
-          ))}
-        </span>
+        <div className="text-right text-sm text-gray-400">
+          <p className="space-x-2">
+            {note.tags.map((tag) => (
+              <span key={tag}>#{tag}</span>
+            ))}
+          </p>
+
+          <p className="mt-1">发布于 {note.publishedAt}</p>
+        </div>
       </div>
-    </div>
+    </Link>
   );
 }

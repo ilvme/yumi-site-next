@@ -1,62 +1,85 @@
-'use cache';
-import BlogHero from '@/components/BlogHero';
 import NoteItem from '@/components/post/NoteItem';
-import { listPublishedPost } from '@/lib/notion';
+import { listAllPages, listPublishedEssays } from '@/lib/notion';
+import Link from 'next/link';
 import { SITE_CONFIG } from '../../../../yumi.config';
 
-export default async function NotesPage() {
-  const { posts, nextCursor, hasMore } = await listPublishedPost(
-    SITE_CONFIG.essays_db_id,
-    {
-      sorts: [{ property: 'publishedAt', direction: 'descending' }],
-      pageSize: 5,
-    }
-  );
-  const currentPage = 1;
-  const total = Math.ceil(posts.length / 5);
-  // await reqSearchPostsByTitle('不');
+async function getPosts(category: string) {
+  'use cache';
+  let options: object;
+  if (category === 'All') {
+    options = {
+      sorts: [
+        {
+          property: 'publishedAt',
+          direction: 'descending',
+        },
+      ],
+    };
+  } else {
+    options = {
+      sorts: [
+        {
+          property: 'publishedAt',
+          direction: 'descending',
+        },
+      ],
+      filter: {
+        property: 'category',
+        select: {
+          equals: category,
+        },
+      },
+    };
+  }
 
-  const categories = [
-    { name: '所有', slug: 'all' },
-    { name: '进击的前端', slug: 'frontend' },
-    { name: '折戟的后端', slug: 'backend' },
-    { name: 'DevOps', slug: 'devops' },
-    { name: '架构与设计', slug: 'architecture' },
-    { name: '工具链', slug: 'toolchain' },
-  ];
+  return await listPublishedEssays(SITE_CONFIG.notes_db_id, options);
+}
+
+export default async function NotesPage(props: {
+  searchParams?: Promise<{ category: string }>;
+}) {
+  const searchParams = await props.searchParams;
+  const category = searchParams?.category || 'All';
+  const posts = await getPosts(category);
+
+  // await reqSearchPostsByTitle('不');
+  // 获取所有文章的类型
+  const allPosts = await listAllPages(SITE_CONFIG.notes_db_id);
+  const categories: string[] = ['All'];
+
+  new Set(
+    allPosts.map((page) => page.properties.category?.select?.name)
+  ).forEach((c) => {
+    categories.push(c);
+  });
   return (
     <div className="py-3">
-      <BlogHero title="技术笔记" description="" />
-
-      <div className="mb-5 flex justify-center gap-5 text-xl">
-        {categories.map((category) => {
-          return (
-            <a
-              key={category.slug}
-              href={`/notes/${category.slug}`}
-              className="text-gray-500 hover:text-gray-700"
+      <div className="sticky top-10 flex justify-center gap-5 bg-[var(--background)] pt-8 pb-6 text-2xl">
+        {categories.map((cc) => {
+          return cc === 'All' ? (
+            <Link
+              key={cc}
+              href={`/notes`}
+              className={`text-gray-500 hover:text-rose-500 ${category === cc ? 'font-bold text-rose-500 underline decoration-wavy' : ''}`}
             >
-              {category.name}
-            </a>
+              {cc}
+            </Link>
+          ) : (
+            <Link
+              key={cc}
+              href={`/notes?category=${cc}`}
+              className={`text-gray-500 hover:text-rose-500 ${category === cc ? 'font-bold text-rose-500 underline decoration-wavy' : ''}`}
+            >
+              {cc}
+            </Link>
           );
         })}
       </div>
 
-      <div>
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
         {posts.map((note) => (
           <NoteItem key={note.id} note={note} />
         ))}
-      </div>
-
-      {/* 分页设计 */}
-      <div className="mt-5 flex justify-center gap-5 text-xl">
-        <a href="#" className="text-gray-500 hover:text-gray-700">
-          上一页
-        </a>
-        {currentPage} / {total}
-        <a href="#" className="text-gray-500 hover:text-gray-700">
-          下一页
-        </a>
       </div>
     </div>
   );
