@@ -7,12 +7,14 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-[var(--background)] dark:border-gray-900">
       <div className="flex h-14 items-center justify-between">
         <Link href="/" className="flex items-center">
-          <span className="text-3xl font-bold">林深时觉寒</span>
+          <span className="text-3xl font-bold text-gray-600 dark:text-[#c7cbd2]">
+            林深时觉寒
+          </span>
         </Link>
         <nav className="flex items-center space-x-5 text-base font-medium">
           {navItems.map((item) => (
             <Link key={item.href} href={item.href} className="">
-              <span className="font-bold text-gray-600 hover:text-rose-500 dark:text-[#c7cbd2]">
+              <span className="font-bold text-gray-600 hover:text-rose-500 dark:text-[#c7cbd2] dark:hover:text-rose-600">
                 {item.name}
               </span>
             </Link>

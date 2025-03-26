@@ -29,7 +29,7 @@ export default async function EssaysPage() {
       <div className="space-y-6">
         {years.map((year) => (
           <section key={year} className="">
-            <h3 className="mb-2 text-xl font-bold text-rose-200 dark:text-rose-600">
+            <h3 className="mb-2 text-xl font-bold text-rose-400 dark:text-rose-600">
               {year}
             </h3>
             <div className="ml-4">
