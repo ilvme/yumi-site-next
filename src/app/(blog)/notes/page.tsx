@@ -1,16 +1,50 @@
 import NoteItem from '@/components/post/NoteItem';
-import { listAllPages, listPublishedEssays } from '@/lib/notion';
+import {
+  listAllPages,
+  listPublishedPosts,
+  listPublishedPostsLimit,
+} from '@/lib/notion';
 import Link from 'next/link';
 import { SITE_CONFIG } from '../../../../yumi.config';
 
 async function getPosts(category: string) {
   'use cache';
   let options: object;
-  if (category === 'All') {
+  if (category === 'Recently') {
     options = {
+      filter: {
+        property: 'Status',
+        select: {
+          is_not_empty: true,
+          equals: 'Published',
+        },
+      },
+      pageSize: 6,
       sorts: [
         {
-          property: 'publishedAt',
+          property: 'PublishedAt',
+          direction: 'descending',
+        },
+      ],
+    };
+    return await listPublishedPostsLimit(
+      SITE_CONFIG.NOTION_NOTES_DB_ID,
+      options
+    );
+  }
+
+  if (category === 'All') {
+    options = {
+      filter: {
+        property: 'Status',
+        select: {
+          is_not_empty: true,
+          equals: 'Published',
+        },
+      },
+      sorts: [
+        {
+          property: 'PublishedAt',
           direction: 'descending',
         },
       ],
@@ -19,36 +53,47 @@ async function getPosts(category: string) {
     options = {
       sorts: [
         {
-          property: 'publishedAt',
+          property: 'PublishedAt',
           direction: 'descending',
         },
       ],
       filter: {
-        property: 'category',
-        select: {
-          equals: category,
-        },
+        and: [
+          {
+            property: 'Status',
+            select: {
+              is_not_empty: true,
+              equals: 'Published',
+            },
+          },
+          {
+            property: 'Category',
+            select: {
+              equals: category,
+            },
+          },
+        ],
       },
     };
   }
 
-  return await listPublishedEssays(SITE_CONFIG.notes_db_id, options);
+  return await listPublishedPosts(SITE_CONFIG.NOTION_NOTES_DB_ID, options);
 }
 
 export default async function NotesPage(props: {
   searchParams?: Promise<{ category: string }>;
 }) {
   const searchParams = await props.searchParams;
-  const category = searchParams?.category || 'All';
+  const category = searchParams?.category || 'Recently';
   const posts = await getPosts(category);
 
   // await reqSearchPostsByTitle('不');
   // 获取所有文章的类型
-  const allPosts = await listAllPages(SITE_CONFIG.notes_db_id);
-  const categories: string[] = ['All'];
+  const allPosts = await listAllPages(SITE_CONFIG.NOTION_NOTES_DB_ID);
+  const categories: string[] = ['Recently', 'All'];
 
   new Set(
-    allPosts.map((page) => page.properties.category?.select?.name)
+    allPosts.map((page) => page.properties.Category?.select?.name)
   ).forEach((c) => {
     categories.push(c);
   });
@@ -56,7 +101,7 @@ export default async function NotesPage(props: {
     <div className="py-3">
       <div className="sticky top-10 flex justify-center gap-5 bg-[var(--background)] pt-8 pb-6 text-2xl">
         {categories.map((cc) => {
-          return cc === 'All' ? (
+          return cc === 'Recently' ? (
             <Link
               key={cc}
               href={`/notes`}

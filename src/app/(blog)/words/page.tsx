@@ -2,12 +2,12 @@
 
 import BlogHero from '@/components/BlogHero';
 import WordCard from '@/components/word/WordCard';
-import { listPublishedWords } from '@/lib/notion';
+import { listWords } from '@/lib/notion';
 import { Word } from '@/lib/notion-types';
 import { SITE_CONFIG } from '../../../../yumi.config';
 
 async function getWords() {
-  const words = await listPublishedWords(SITE_CONFIG.words_db_id);
+  const words = await listWords(SITE_CONFIG.NOTION_WORDS_DB_ID);
 
   // 按年份和月份分组
   const wordsByYearMonth = words.reduce((acc, word) => {

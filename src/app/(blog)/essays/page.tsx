@@ -1,12 +1,19 @@
 'use cache';
 import BlogHero from '@/components/BlogHero';
 import PostItem from '@/components/post/PostItem';
-import { listPublishedEssays } from '@/lib/notion';
+import { listPublishedPosts } from '@/lib/notion';
 import { SITE_CONFIG } from '../../../../yumi.config';
 
 export default async function EssaysPage() {
-  const posts = await listPublishedEssays(SITE_CONFIG.essays_db_id, {
-    sorts: [{ property: 'publishedAt', direction: 'descending' }],
+  const posts = await listPublishedPosts(SITE_CONFIG.NOTION_ESSAYS_DB_ID, {
+    sorts: [{ property: 'PublishedAt', direction: 'descending' }],
+    filter: {
+      property: 'Status',
+      select: {
+        is_not_empty: true,
+        equals: 'Published',
+      },
+    },
   });
 
   // 按年份分组文章

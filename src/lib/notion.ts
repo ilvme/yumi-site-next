@@ -1,17 +1,21 @@
-import { Post, PostList, PostMeta, Word } from '@/lib/notion-types';
+import { Post, PostMeta, Word } from '@/lib/notion-types';
 import { Client } from '@notionhq/client';
 import { NotionToMarkdown } from 'notion-to-md';
 import { SITE_CONFIG } from '../../yumi.config';
 
-export const notion = new Client({ auth: SITE_CONFIG.notion_token });
+export const notion = new Client({ auth: SITE_CONFIG.NOTION_AUTH });
 export const n2m = new NotionToMarkdown({ notionClient: notion });
 
-// 通过 slug 获取文章信息
+/**
+ * 通过 slug 获取文章信息
+ * @param databaseId 数据库 id
+ * @param slug 文章 slug，当 slug 为空时，则 slug 为 pageId
+ */
 export async function getPostBySlug(databaseId: string, slug: string) {
   const response = await notion.databases.query({
     database_id: databaseId,
     filter: {
-      property: 'slug',
+      property: 'Slug',
       formula: {
         string: {
           equals: slug,
@@ -20,61 +24,53 @@ export async function getPostBySlug(databaseId: string, slug: string) {
     },
   });
 
-  if (response.results.length === 0) {
-    return null;
-  }
-
   if (response.results.length > 1) {
     throw new Error('找到多个文章');
   }
 
-  const page = response.results[0];
-  const mdBlocks = await n2m.pageToMarkdown(page.id);
-  const mdString = n2m.toMarkdownString(mdBlocks);
+  if (response.results.length === 1) {
+    const page = response.results[0];
+    const mdBlocks = await n2m.pageToMarkdown(page.id);
+    const mdString = n2m.toMarkdownString(mdBlocks);
 
-  const post: Post = {
-    postMeta: toPostMeta(page),
+    const post: Post = {
+      postMeta: toPostMeta(page),
+      content: mdString.parent,
+    };
+    return post;
+  }
+
+  // slug 未设置，为 pageId
+  const res = await notion.pages.retrieve({ page_id: slug });
+
+  const mdBlocks = await n2m.pageToMarkdown(slug);
+  const mdString = n2m.toMarkdownString(mdBlocks);
+  return {
+    postMeta: toPostMeta(res),
     content: mdString.parent,
   };
-  return post;
 }
 
-// 获取指定数据库下所有已发布的文章，有分页限制，最大100条
-export async function listPublishedPost(
+// 获取指定数据库下所有文章，带分页
+export async function listPublishedPostsLimit(
   databaseId: string,
   options?: {
+    filter?: any;
     sorts?: any;
     pageSize?: number;
-    filter?: any;
-    startCursor?: string;
   }
 ) {
-  try {
-    const res = await notion.databases.query({
-      database_id: databaseId,
-      page_size: options?.pageSize || 10,
-      start_cursor: options?.startCursor,
-      filter: options?.filter,
-      sorts: options?.sorts,
-    });
-
-    const posts = res.results.map((item) => toPostMeta(item)) as PostMeta[];
-
-    const result = {
-      hasMore: res.has_more,
-      nextCursor: res.next_cursor,
-      posts,
-    };
-
-    return result as PostList;
-  } catch (error) {
-    console.error('分页获取文章列表失败:', error);
-    throw error;
-  }
+  const res = await notion.databases.query({
+    database_id: databaseId,
+    page_size: options?.pageSize || 5,
+    filter: options?.filter,
+    sorts: options?.sorts,
+  });
+  return res.results.map((item) => toPostMeta(item));
 }
 
 // 获取指定数据库下所有文章，突破分页限制
-export async function listPublishedEssays(
+export async function listPublishedPosts(
   databaseId: string,
   options?: {
     filter?: any;
@@ -83,69 +79,52 @@ export async function listPublishedEssays(
   }
 ) {
   const allPages = await listAllPages(databaseId, options);
+  console.log(allPages);
   return allPages.map((item) => toPostMeta(item));
 }
 
-export const toPostMeta = (item) => ({
-  id: item.id,
-  icon: item.icon.emoji,
-  title: item.properties.title?.title[0]?.plain_text || 'Untitled',
-  slug: item.properties.slug?.rich_text[0]?.plain_text || item.id,
-  tags: item.properties.tags?.multi_select?.map((tag) => tag.name) || [],
-  category: item.properties.category?.select?.name,
-  publishedAt: item.properties.publishedAt?.date?.start,
-  published: item.properties.published?.checkbox,
-  cover: item.cover?.external?.url || item.cover?.file?.url,
-  summary: item.properties.summary?.rich_text[0]?.plain_text,
-});
+// 当未设置 slug 时，自动取 id 为路由
+
+export const toPostMeta = (item) =>
+  ({
+    id: item.id,
+    icon: item.icon?.emoji,
+    title: item.properties.Title?.title[0]?.plain_text || 'Untitled',
+    slug: item.properties.Slug?.rich_text[0]?.plain_text || item.id,
+    tags: item.properties.Tags?.multi_select?.map((tag) => tag.name) || [],
+    category: item.properties.Category?.select?.name,
+    publishedAt: item.properties.PublishedAt?.date?.start,
+    cover: item.cover?.external?.url || item.cover?.file?.url,
+    highlight: item.properties.isHL?.checkbox,
+    summary: item.properties.Summary?.rich_text[0]?.plain_text,
+  }) as PostMeta;
 
 // 获取所有发布的说说
-export async function listPublishedWords(databaseId: string) {
+export async function listWords(databaseId: string) {
   const allPages = await listAllPages(databaseId, {
-    sorts: [{ property: '发布时间', direction: 'descending' }],
+    sorts: [{ property: 'PublishAt', direction: 'descending' }],
   });
 
-  const allWords: Word[] = allPages.map((item) => {
+  const allWords = allPages.map((item) => {
     return {
       id: item.id,
-      content: item.properties.Title.title[0]?.plain_text || 'Untitled',
-      createAt: item.properties[`发布时间`].formula.date.start,
+      content:
+        item.properties.Title.title[0]?.plain_text || '这条说说内容去火星啦~',
+      createAt: item.properties.PublishAt.formula.date.start,
     };
   });
-  return allWords;
+  return allWords as Word[];
 }
 
 // 获取简历
 export async function getResumeStr() {
-  if (!SITE_CONFIG.resume_page_id) {
-    return;
+  if (!SITE_CONFIG.NOTION_RESUME_PAGE_ID) {
+    return '您尚未配置简历相关信息，请参照 README 文档完善环境变量「NOTION_RESUME_PAGE_ID」';
   }
-  const mdBlocks = await n2m.pageToMarkdown(SITE_CONFIG.resume_page_id);
+  const mdBlocks = await n2m.pageToMarkdown(SITE_CONFIG.NOTION_RESUME_PAGE_ID);
   const mdString = n2m.toMarkdownString(mdBlocks);
 
   return mdString.parent;
-}
-
-//
-export async function reqSearchPostsByTitle(searchText: string) {
-  if (!SITE_CONFIG.notes_db_id) {
-    return;
-  }
-
-  const res = await notion.databases.query({
-    database_id: SITE_CONFIG.notes_db_id,
-    filter: {
-      property: 'title',
-      title: {
-        contains: searchText,
-      },
-    },
-  });
-  console.log('search', res);
-  console.log(
-    'search-results',
-    res.results.map((item) => item.properties.title.title[0].plain_text)
-  );
 }
 
 // 获取指定数据库下所有页面，支持自定义查询参数

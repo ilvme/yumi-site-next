@@ -10,7 +10,10 @@ export default async function PostPage({
 }) {
   const { slug } = await params;
 
-  const { content, postMeta } = await getPostBySlug(SITE_CONFIG.notes_db_id ,slug);
+  const { content, postMeta } = await getPostBySlug(
+    SITE_CONFIG.NOTION_NOTES_DB_ID,
+    slug
+  );
 
   return (
     <div className="mx-auto py-4">

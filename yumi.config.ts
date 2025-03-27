@@ -19,12 +19,12 @@ export const SITE_CONFIG = {
 
   /// config, do not modify, unless you know what you are doing!!!
   // notion config，do not modify!!!
-  notion_token: process.env.NOTION_AUTH || '',
-  essays_db_id: process.env.NOTION_ESSAYS_DB_ID || '',
-  words_db_id: process.env.NOTION_WORDS_DB_ID || '',
-  notes_db_id: process.env.NOTION_NOTES_DB_ID || '',
-  resume_page_id: process.env.NOTION_RESUME_PAGE_ID || '',
+  NOTION_AUTH: process.env.NOTION_AUTH || '',
+  NOTION_ESSAYS_DB_ID: process.env.NOTION_ESSAYS_DB_ID || '',
+  NOTION_WORDS_DB_ID: process.env.NOTION_WORDS_DB_ID || '',
+  NOTION_NOTES_DB_ID: process.env.NOTION_NOTES_DB_ID || '',
+  NOTION_RESUME_PAGE_ID: process.env.NOTION_RESUME_PAGE_ID || '',
 
   // github config，do not modify!!!
-  github_token: process.env.GITHUB_TOKEN || '',
+  GITHUB_TOKEN: process.env.GITHUB_TOKEN || '',
 };
