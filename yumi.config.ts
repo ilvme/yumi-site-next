@@ -7,6 +7,8 @@ export const SITE_CONFIG = {
   email: 'ikangjia.cn@outlook.com',
   lang: 'zh_CN', // zh_CN, en_US, ja_JP, ko_KR, ...
 
+  since: '2012',
+
   // social config
   social: {
     github: 'https://github.com/ilvme',

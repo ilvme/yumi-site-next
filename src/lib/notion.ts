@@ -79,7 +79,7 @@ export async function listPublishedPosts(
   }
 ) {
   const allPages = await listAllPages(databaseId, options);
-  console.log(allPages);
+  // console.log(allPages);
   return allPages.map((item) => toPostMeta(item));
 }
 

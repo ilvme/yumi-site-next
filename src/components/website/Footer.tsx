@@ -1,9 +1,11 @@
 import Link from 'next/link';
+import { SITE_CONFIG } from '../../../yumi.config';
 
 export default function Footer() {
   return (
     <footer className="mt-10 mb-6 text-base">
-      以上内容版权所有 ©<Link href="/public">林深时觉寒</Link> 2012 -{' '}
+      以上内容版权所有 ©<Link href="/">林深时觉寒</Link>{' '}
+      {SITE_CONFIG.since || new Date().getFullYear()} -{' '}
       {new Date().getFullYear()}
       <div>
         Powered by{' '}
