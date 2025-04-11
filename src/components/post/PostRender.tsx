@@ -20,14 +20,15 @@ const CodeBlock = ({ language, codeString }) => {
 export default async function PostRender({ content }) {
   return (
     <>
-      <article className="prose prose-p:text-lg dark:prose-invert prose-a:break-words prose-code:break-words prose-img:mx-auto prose-img:rounded-md prose-inline-code:text-rose-400 prose-inline-code:before:content-none prose-inline-code:after:content-none prose-img:sm:w-[90%] max-w-[800px]">
+      <article className="prose prose-p:text-base prose-p:leading-7 dark:prose-invert prose-a:break-words prose-code:break-words prose-img:mx-auto prose-img:rounded-md prose-inline-code:text-rose-400 prose-inline-code:before:content-none prose-inline-code:after:content-none prose-img:sm:w-[90%] max-w-[660px]">
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
           rehypePlugins={[rehypeRaw]}
           components={{
             blockquote(props) {
               return (
-                <blockquote className="border-l-[4px] border-l-rose-500 text-rose-500 not-italic">
+                // <blockquote className="border-l-[4px] border-l-rose-500 text-rose-500 not-italic">
+                <blockquote className="border-l-[4px] not-italic">
                   {props.children}
                 </blockquote>
               );
@@ -59,7 +60,7 @@ export default async function PostRender({ content }) {
             },
             a(props) {
               return (
-                <a className="text-rose-400 underline" {...props}>
+                <a className="font-bold underline" {...props}>
                   {props.children}
                 </a>
               );

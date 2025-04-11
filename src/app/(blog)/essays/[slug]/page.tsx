@@ -18,7 +18,7 @@ export default async function PostPage({
   return (
     <div className="mx-auto py-4">
       <header className="mb-4">
-        <h1 className="mb-2 text-3xl text-rose-700">{postMeta.title}</h1>
+        <h1 className="mb-2 text-2xl text-rose-700">{postMeta.title}</h1>
         <div className="space-x-4 text-gray-600 dark:text-gray-400">
           <span className="text-sm text-gray-400"> {postMeta.publishedAt}</span>
           {postMeta.tags && (

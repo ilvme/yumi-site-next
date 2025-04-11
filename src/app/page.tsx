@@ -10,7 +10,7 @@ import { SITE_CONFIG } from '../../yumi.config';
 
 export default function Home() {
   return (
-    <main className="py-28">
+    <main className="max-w-[800] py-28">
       <HomeWidgets />
 
       <article className="text-gray-700 lg:flex lg:items-center lg:gap-8 lg:px-2 dark:text-gray-300">
