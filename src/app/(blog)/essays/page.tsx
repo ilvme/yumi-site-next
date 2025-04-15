@@ -6,14 +6,15 @@ import { SITE_CONFIG } from '../../../../yumi.config';
 
 export default async function EssaysPage() {
   const posts = await listPublishedPosts(SITE_CONFIG.NOTION_ESSAYS_DB_ID, {
-    sorts: [{ property: 'PublishedAt', direction: 'descending' }],
     filter: {
       property: 'Status',
+      // TODO 探索为啥不生效
       select: {
         is_not_empty: true,
         equals: 'Published',
       },
     },
+    sorts: [{ property: 'PublishedAt', direction: 'descending' }],
   });
 
   // 按年份分组文章

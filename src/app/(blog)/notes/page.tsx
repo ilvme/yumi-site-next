@@ -99,7 +99,7 @@ export default async function NotesPage(props: {
   });
   return (
     <div className="py-3">
-      <div className="sticky top-10 flex justify-center gap-5 bg-[var(--background)] pt-8 pb-6 text-2xl">
+      <div className="sticky top-14 flex justify-center gap-5 bg-[var(--background)] pt-2 pb-4 text-lg font-bold">
         {categories.map((cc) => {
           return cc === 'Recently' ? (
             <Link

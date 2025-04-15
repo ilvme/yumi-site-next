@@ -9,6 +9,8 @@ export interface PostMeta {
   publishedAt: string;
   highlight?: boolean;
 
+  status?: string;
+
   tags?: string[];
   category?: string;
 }

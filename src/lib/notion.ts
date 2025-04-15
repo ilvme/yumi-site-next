@@ -79,8 +79,11 @@ export async function listPublishedPosts(
   }
 ) {
   const allPages = await listAllPages(databaseId, options);
-  // console.log(allPages);
-  return allPages.map((item) => toPostMeta(item));
+
+  // 因为搜索不生效，在此手动筛选
+  return allPages
+    .map((item) => toPostMeta(item))
+    .filter((item) => item.status === 'Published');
 }
 
 // 当未设置 slug 时，自动取 id 为路由
@@ -96,6 +99,7 @@ export const toPostMeta = (item) =>
     publishedAt: item.properties.PublishedAt?.date?.start,
     cover: item.cover?.external?.url || item.cover?.file?.url,
     highlight: item.properties.isHL?.checkbox,
+    status: item.properties.Status?.select?.name,
     summary: item.properties.Summary?.rich_text[0]?.plain_text,
   }) as PostMeta;
 
